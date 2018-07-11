@@ -7,6 +7,7 @@
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    margin-top: 20px;
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
@@ -16,13 +17,6 @@ textarea {
     max-width: 280px;
 }
 
-#tableBlock {
-    width:auto;
-}
-#editBlock {
-    display:none;
-    float:right;
-}
-#createBlock {
-    float:right;
+.product-block {
+    margin-top: 20px;
 }

@@ -1,176 +1,57 @@
 ﻿<div class="row">
-    <div id="tableBlock"></div>
-    <div id="editBlock">
+    <div class="col-md-4 product-edit-block" id="editBlock">
         <p><b>Edit Product</b></p>
-        <table>
-            <tr><td><input type="hidden" id="editId" /></td><td></td></tr>
-            <tr><td><label>Name: </label></td><td><input type="text" id="editName" /></td></tr>
-            <tr><td><label>Description: </label></td><td><input type="text" id="editDescription" /></td></tr>
-            <tr><td><label>Price: </label></td><td><input type="text" id="editPrice" /></td></tr>
-            <tr><td><label>PictureUrl: </label></td><td><input type="text" id="editPictureUrl" /></td></tr>
-        </table>
-        <button id="editProduct">Save</button>
+        <form role="form">
+            <input type="hidden" id="editId" />
+            <div class="form-group">
+                <label for="addName">Name:</label>
+                <input type="text" class="form-control" id="editName">
+            </div>
+            <div class="form-group">
+                <label for="addDescription">Description:</label>
+                <input type="text" class="form-control" id="editDescription">
+            </div>
+            <div class="form-group">
+                <label for="addPrice">Price:</label>
+                <input type="text" class="form-control" id="editPrice">
+            </div>
+            <div class="form-group">
+                <label for="addPrice">PictureUrl:</label>
+                <input type="text" class="form-control" id="editPictureUrl">
+            </div>
+            <button type="submit" id="editProduct" class="btn btn-primary">Update</button>
+            <button class="btn btn-default clear-values">Clear</button>
+        </form>
     </div>
-    <div id="createBlock">
-        <p><b>Add new product</b></p>
-        <table>
-            <tr><td><input type="hidden" id="editId" /></td><td></td></tr>
-            <tr><td><label>Name: </label></td><td><input type="text" id="addName" /></td></tr>
-            <tr><td><label>Description: </label></td><td><input type="text" id="addDescription" /></td></tr>
-            <tr><td><label>Price: </label></td><td><input type="text" id="addPrice" /></td></tr>
-            <tr><td><label>PictureUrl: </label></td><td><input type="text" id="addPictureUrl" /></td></tr>
-        </table>
-        <button id="addProduct">Save</button>
+    <div class="col-md-4 product-create-block" id="createBlock">
+        <p><b>Add Product</b></p>
+        <form role="form">
+            <input type="hidden" id="editId" />
+            <div class="form-group">
+                <label for="addName">Name:</label>
+                <input type="text" class="form-control" id="addName">
+            </div>
+            <div class="form-group">
+                <label for="addDescription">Description:</label>
+                <input type="text" class="form-control" id="addDescription">
+            </div>
+            <div class="form-group">
+                <label for="addPrice">Price:</label>
+                <input type="text" class="form-control" id="addPrice">
+            </div>
+            <div class="form-group">
+                <label for="addPrice">PictureUrl:</label>
+                <input type="text" class="form-control" id="addPictureUrl">
+            </div>
+            <button type="submit" id="addProduct" class="btn btn-success">Create</button>
+            <button class="btn btn-default clear-values">Clear</button>
+        </form>
+    </div>
+    <div class="col-md-8">
+       <div id="tableBlock" class="product-block"></div>
     </div>
     @section scripts
-{
-        <script type="text/javascript">
-    $(document).ready(function () {
-
-        GetAllProducts();
-
-        $("#editProduct").click(function (event) {
-            event.preventDefault();
-            EditProduct();
-        });
-
-        $("#addProduct").click(function (event) {
-            event.preventDefault();
-            AddProduct();
-        });
-
-    });
-    // Всі продукти
-    function GetAllProducts() {
-
-        $("#createBlock").css('display', 'block');
-        $("#editBlock").css('display', 'none');
-        $.ajax({
-            url: '/api/values',
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                WriteResponse(data);
-            },
-            error: function (x, y, z) {
-                alert(x + '\n' + y + '\n' + z);
-            }
-        });
-    }
- // Додавання продукту
-    function AddProduct() {
-        // Отримуємо значення для додавання
-        var product = {
-            Name: $('#addName').val(),
-            Description: $('#addDescription').val(),
-            Price: $('#addPrice').val(),
-            PictureUrl: $('#addPictureUrl').val()
-        };
-
-        $.ajax({
-            url: '/api/values/',
-            type: 'POST',
-            data: JSON.stringify(product),
-            contentType: "application/json;charset=utf-8",
-            success: function (data) {
-                GetAllProducts();
-            },
-            error: function (x, y, z) {
-                alert(x + '\n' + y + '\n' + z);
-            }
-        });
-    }
- // Видалення
-    function DeleteProduct(id) {
-
-        $.ajax({
-            url: '/api/values/' + id,
-            type: 'DELETE',
-            contentType: "application/json;charset=utf-8",
-            success: function (data) {
-                GetAllProducts();
-            },
-            error: function (x, y, z) {
-                alert(x + '\n' + y + '\n' + z);
-            }
-        });
-    }
-    // Редагування
-    function EditProduct() {
-        var id = $('#editId').val()
-        // нові значання
-        var product = {
-            Id: $('#editId').val(),
-            Name: $('#editName').val(),
-            Description: $('#editDescription').val(),
-            Price: $('#editPrice').val(),
-            PictureUrl: $('#editPictureUrl').val()
-        };
-        $.ajax({
-            url: '/api/values/' + id,
-            type: 'PUT',
-            data: JSON.stringify(product),
-            contentType: "application/json;charset=utf-8",
-            success: function (data) {
-                GetAllProducts();
-            },
-            error: function (x, y, z) {
-                alert(x + '\n' + y + '\n' + z);
-            }
-        });
-    }
- // вивід продукту
-    function WriteResponse(products) {
-        var strResult = "<table><th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>PictureUrl</th>";
-        $.each(products, function (index, product) {
-            strResult += "<tr><td>" + product.Id + "</td><td> " + product.Name + "</td><td>" +
-            product.Description + "</td><td>" + product.Price +"</td><td>" + product.PictureUrl +
-            "</td><td><a id='editItem' data-item='" + product.Id + "' onclick='EditItem(this);' >Edit</a></td>" +
-            "<td><a id='delItem' data-item='" + product.Id + "' onclick='DeleteItem(this);' >Delete</a></td></tr>";
-        });
-        strResult += "</table>";
-        $("#tableBlock").html(strResult);
-
-    }
-    // обробка видалення
-    function DeleteItem(el) {     
-        var id = $(el).attr('data-item');
-        DeleteProduct(id);
-    }
-    // обробник редагування
-    function EditItem (el) {       
-        var id = $(el).attr('data-item');
-        GetProduct(id);
-    }
-    // вивід данних редагування
-    function ShowProduct(product) {
-        if (product != null) {
-            $("#createBlock").css('display', 'none');
-            $("#editBlock").css('display', 'block');
-            $("#editId").val(product.Id);
-            $("#editName").val(product.Name);
-            $("#editDescription").val(product.Description);
-            $("#editPrice").val(product.Price);
-            $("#editPictureUrl").val(product.PictureUrl);
-        }
-        else {
-            alert("Product not created");
-        }
-    }
-    // запит на рудагування
-    function GetProduct(id) {
-        $.ajax({
-            url: '/api/values/' + id,
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                ShowProduct(data);
-            },
-            error: function (x, y, z) {
-                alert(x + '\n' + y + '\n' + z);
-            }
-        });
-    }
-        </script>
+    {
+        <script src="@Url.Content("~/Scripts/app.index.js")"></script>
     }
 </div>
